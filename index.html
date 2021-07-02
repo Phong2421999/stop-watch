@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+    <script src="index.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: black;
+            text-shadow: 0px 0px 1px #fff;
+            outline: none;
+        }
+
+        .stop-watch
+        {
+            font-size: 10vw;
+            width: 34%;
+            color: whitesmoke;
+            caret-color: rgba(0,0,0,0); 
+        }
+    </style>
+    <title>Stop Watch</title>
+</head>
+<body>
+    <div class="stop-watch" id="stop_watch" value="00:00" readonly>00:00</div>
+    <script>
+        let current_time = 0
+        let start = false
+        function watch(){
+            if(start)
+            {
+                current_time += 1000
+                let time = convert_time()
+                $('#stop_watch').text(`${time.minutes}:${time.seconds}`)
+            }
+            return; 
+        }
+
+        function convert_time()
+        {
+            let random = Math.floor(Math.random() * 9) + 1;
+            let calculate_time = current_time
+            let minutes = Math.floor(calculate_time/60000)
+            let seconds = Math.floor(calculate_time % 60000 / 1000)
+            let milliseconds  = Math.floor(calculate_time % 1000) / 10
+            if (milliseconds > random){
+                milliseconds -= random
+            }
+            else{
+                milliseconds = random - milliseconds
+            }
+
+            minutes = minutes <= 9 ? '0' + minutes : minutes.toString()
+            seconds = seconds <= 9 ? '0' + seconds : seconds.toString()
+            milliseconds = milliseconds <= 9 ? '0' + milliseconds : milliseconds.toString()
+            return {
+                minutes: minutes,
+                seconds: seconds,
+                milliseconds: milliseconds
+            }
+        }
+
+        $(document).ready(function(){
+            setInterval(watch, 1000)
+        })
+
+        $(document).keydown(function(e){
+            if (e.which == 32) {
+                start = !start
+            }
+            if (e.which == 27)
+            {
+                current_time = 0
+                let time = convert_time()
+                $('#stop_watch').text(`${time.minutes}:${time.seconds}`)
+                start = false
+            }
+        });
+    </script>
+</body>
+</html>
